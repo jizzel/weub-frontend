@@ -10,7 +10,7 @@ export abstract class ApiService {
   private readonly baseUrl = environment.apiUrl;
   protected readonly http = inject(HttpClient);
 
-  constructor(protected endpoint: string) {
+  protected constructor(protected endpoint: string) {
     this.baseUrl = `${environment.apiUrl}/${endpoint}`;
   }
 
@@ -76,15 +76,33 @@ export abstract class ApiService {
       );
   }
 
-  upload<T>(path: string, formData: FormData, headers?: HttpHeaders): Observable<HttpEvent<BaseResponse<T>>> {
+  upload<T>(path: string, formData: FormData, headers?: HttpHeaders): Observable<{ progress: number; response?: T }> {
     return this.http.post<BaseResponse<T>>(`${this.baseUrl}/${path}`, formData, {
-      headers: headers || new HttpHeaders(),
+      headers: headers || this.getHeaders(),
       reportProgress: true,
       observe: 'events'
     }).pipe(
+      map((event: HttpEvent<BaseResponse<T>>) => {
+        switch (event.type) {
+          case HttpEventType.Sent:
+            return { progress: 0 };
+
+          case HttpEventType.UploadProgress:
+            const percent = event.total ? Math.round((100 * event.loaded) / event.total) : 0;
+            return { progress: percent };
+
+          case HttpEventType.Response:
+            const responseData = this.handleResponse(event.body!);
+            return { progress: 100, response: responseData };
+
+          default:
+            return { progress: 0 };
+        }
+      }),
       catchError(error => this.handleError(error))
     );
   }
+
 
   protected getHeaders(): HttpHeaders {
     return new HttpHeaders({
