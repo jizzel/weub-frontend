@@ -7,9 +7,12 @@ export interface Pagination {
   hasPreviousPage: boolean;
 }
 
-export interface PaginationRequest {
-  page?: number;
-  limit?: number;
-  sortBy?: 'createdAt' | 'title' | 'duration';
-  sortOrder?: 'asc' | 'desc';
+export interface PaginationParams {
+  page: number;
+  pageSize: number;
+}
+
+export interface PaginatedResponse<T> {
+  data: T[];
+  pagination: Pagination;
 }
