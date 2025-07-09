@@ -1,0 +1,317 @@
+/*weub-frontend/*/
+/*├── README.md*/
+/*├── package.json*/
+/*├── angular.json*/
+/*├── tsconfig.json*/
+/*├── tsconfig.app.json*/
+/*├── tsconfig.spec.json*/
+/*├── tailwind.config.js*/
+/*├── .eslintrc.json*/
+/*├── .gitignore*/
+/*├── .editorconfig*/
+/*│*/
+/*├── src/*/
+/*│   ├── index.html*/
+/*│   ├── main.ts*/
+/*│   ├── styles.css*/
+/*│   ├── favicon.ico*/
+/*│   │*/
+/*│   ├── app/*/
+/*│   │   ├── app.component.ts*/
+/*│   │   ├── app.component.html*/
+/*│   │   ├── app.component.css*/
+/*│   │   ├── app.component.spec.ts*/
+/*│   │   ├── app.config.ts*/
+/*│   │   ├── app.routes.ts*/
+/*│   │   │*/
+/*│   │   ├── core/*/
+/*│   │   │   ├── services/*/
+/*│   │   │   │   ├── api.service.ts*/
+/*│   │   │   │   ├── video.service.ts*/
+/*│   │   │   │   ├── upload.service.ts*/
+/*│   │   │   │   ├── streaming.service.ts*/
+/*│   │   │   │   ├── notification.service.ts*/
+/*│   │   │   │   ├── loading.service.ts*/
+/*│   │   │   │   └── error-handler.service.ts*/
+/*│   │   │   │*/
+/*│   │   │   ├── interceptors/*/
+/*│   │   │   │   ├── api.interceptor.ts*/
+/*│   │   │   │   ├── error.interceptor.ts*/
+/*│   │   │   │   └── loading.interceptor.ts*/
+/*│   │   │   │*/
+/*│   │   │   ├── guards/*/
+/*│   │   │   │   └── video-ready.guard.ts*/
+/*│   │   │   │*/
+/*│   │   │   ├── models/*/
+/*│   │   │   │   ├── video.model.ts*/
+/*│   │   │   │   ├── api-response.model.ts*/
+/*│   │   │   │   ├── upload.model.ts*/
+/*│   │   │   │   ├── pagination.model.ts*/
+/*│   │   │   │   └── streaming.model.ts*/
+/*│   │   │   │*/
+/*│   │   │   ├── constants/*/
+/*│   │   │   │   ├── api.constants.ts*/
+/*│   │   │   │   ├── app.constants.ts*/
+/*│   │   │   │   └── video.constants.ts*/
+/*│   │   │   │*/
+/*│   │   │   └── utils/*/
+/*│   │   │       ├── file.utils.ts*/
+/*│   │   │       ├── time.utils.ts*/
+/*│   │   │       ├── validation.utils.ts*/
+/*│   │   │       └── url.utils.ts*/
+/*│   │   │*/
+/*│   │   ├── shared/*/
+/*│   │   │   ├── components/*/
+/*│   │   │   │   ├── header/*/
+/*│   │   │   │   │   ├── header.component.ts*/
+/*│   │   │   │   │   ├── header.component.html*/
+/*│   │   │   │   │   ├── header.component.css*/
+/*│   │   │   │   │   └── header.component.spec.ts*/
+/*│   │   │   │   │*/
+/*│   │   │   │   ├── footer/*/
+/*│   │   │   │   │   ├── footer.component.ts*/
+/*│   │   │   │   │   ├── footer.component.html*/
+/*│   │   │   │   │   ├── footer.component.css*/
+/*│   │   │   │   │   └── footer.component.spec.ts*/
+/*│   │   │   │   │*/
+/*│   │   │   │   ├── loading-spinner/*/
+/*│   │   │   │   │   ├── loading-spinner.component.ts*/
+/*│   │   │   │   │   ├── loading-spinner.component.html*/
+/*│   │   │   │   │   ├── loading-spinner.component.css*/
+/*│   │   │   │   │   └── loading-spinner.component.spec.ts*/
+/*│   │   │   │   │*/
+/*│   │   │   │   ├── error-message/*/
+/*│   │   │   │   │   ├── error-message.component.ts*/
+/*│   │   │   │   │   ├── error-message.component.html*/
+/*│   │   │   │   │   ├── error-message.component.css*/
+/*│   │   │   │   │   └── error-message.component.spec.ts*/
+/*│   │   │   │   │*/
+/*│   │   │   │   ├── confirm-dialog/*/
+/*│   │   │   │   │   ├── confirm-dialog.component.ts*/
+/*│   │   │   │   │   ├── confirm-dialog.component.html*/
+/*│   │   │   │   │   ├── confirm-dialog.component.css*/
+/*│   │   │   │   │   └── confirm-dialog.component.spec.ts*/
+/*│   │   │   │   │*/
+/*│   │   │   │   └── pagination/*/
+/*│   │   │   │       ├── pagination.component.ts*/
+/*│   │   │   │       ├── pagination.component.html*/
+/*│   │   │   │       ├── pagination.component.css*/
+/*│   │   │   │       └── pagination.component.spec.ts*/
+/*│   │   │   │*/
+/*│   │   │   ├── directives/*/
+/*│   │   │   │   ├── file-drop.directive.ts*/
+/*│   │   │   │   ├── lazy-load.directive.ts*/
+/*│   │   │   │   └── auto-focus.directive.ts*/
+/*│   │   │   │*/
+/*│   │   │   ├── pipes/*/
+/*│   │   │   │   ├── file-size.pipe.ts*/
+/*│   │   │   │   ├── duration.pipe.ts*/
+/*│   │   │   │   ├── time-ago.pipe.ts*/
+/*│   │   │   │   └── safe-url.pipe.ts*/
+/*│   │   │   │*/
+/*│   │   │   └── validators/*/
+/*│   │   │       ├── file-type.validator.ts*/
+/*│   │   │       ├── file-size.validator.ts*/
+/*│   │   │       └── custom.validators.ts*/
+/*│   │   │*/
+/*│   │   ├── features/*/
+/*│   │   │   ├── home/*/
+/*│   │   │   │   ├── home.component.ts*/
+/*│   │   │   │   ├── home.component.html*/
+/*│   │   │   │   ├── home.component.css*/
+/*│   │   │   │   └── home.component.spec.ts*/
+/*│   │   │   │*/
+/*│   │   │   ├── video-upload/*/
+/*│   │   │   │   ├── video-upload.component.ts*/
+/*│   │   │   │   ├── video-upload.component.html*/
+/*│   │   │   │   ├── video-upload.component.css*/
+/*│   │   │   │   ├── video-upload.component.spec.ts*/
+/*│   │   │   │   │*/
+/*│   │   │   │   ├── components/*/
+/*│   │   │   │   │   ├── upload-form/*/
+/*│   │   │   │   │   │   ├── upload-form.component.ts*/
+/*│   │   │   │   │   │   ├── upload-form.component.html*/
+/*│   │   │   │   │   │   ├── upload-form.component.css*/
+/*│   │   │   │   │   │   └── upload-form.component.spec.ts*/
+/*│   │   │   │   │   │*/
+/*│   │   │   │   │   ├── file-dropzone/*/
+/*│   │   │   │   │   │   ├── file-dropzone.component.ts*/
+/*│   │   │   │   │   │   ├── file-dropzone.component.html*/
+/*│   │   │   │   │   │   ├── file-dropzone.component.css*/
+/*│   │   │   │   │   │   └── file-dropzone.component.spec.ts*/
+/*│   │   │   │   │   │*/
+/*│   │   │   │   │   └── upload-progress/*/
+/*│   │   │   │   │       ├── upload-progress.component.ts*/
+/*│   │   │   │   │       ├── upload-progress.component.html*/
+/*│   │   │   │   │       ├── upload-progress.component.css*/
+/*│   │   │   │   │       └── upload-progress.component.spec.ts*/
+/*│   │   │   │   │*/
+/*│   │   │   │   └── services/*/
+/*│   │   │   │       └── upload-state.service.ts*/
+/*│   │   │   │*/
+/*│   │   │   ├── video-list/*/
+/*│   │   │   │   ├── video-list.component.ts*/
+/*│   │   │   │   ├── video-list.component.html*/
+/*│   │   │   │   ├── video-list.component.css*/
+/*│   │   │   │   ├── video-list.component.spec.ts*/
+/*│   │   │   │   │*/
+/*│   │   │   │   ├── components/*/
+/*│   │   │   │   │   ├── video-card/*/
+/*│   │   │   │   │   │   ├── video-card.component.ts*/
+/*│   │   │   │   │   │   ├── video-card.component.html*/
+/*│   │   │   │   │   │   ├── video-card.component.css*/
+/*│   │   │   │   │   │   └── video-card.component.spec.ts*/
+/*│   │   │   │   │   │*/
+/*│   │   │   │   │   ├── video-filters/*/
+/*│   │   │   │   │   │   ├── video-filters.component.ts*/
+/*│   │   │   │   │   │   ├── video-filters.component.html*/
+/*│   │   │   │   │   │   ├── video-filters.component.css*/
+/*│   │   │   │   │   │   └── video-filters.component.spec.ts*/
+/*│   │   │   │   │   │*/
+/*│   │   │   │   │   └── search-bar/*/
+/*│   │   │   │   │       ├── search-bar.component.ts*/
+/*│   │   │   │   │       ├── search-bar.component.html*/
+/*│   │   │   │   │       ├── search-bar.component.css*/
+/*│   │   │   │   │       └── search-bar.component.spec.ts*/
+/*│   │   │   │   │*/
+/*│   │   │   │   └── services/*/
+/*│   │   │   │       ├── video-list-state.service.ts*/
+/*│   │   │   │       └── filter.service.ts*/
+/*│   │   │   │*/
+/*│   │   │   ├── video-player/*/
+/*│   │   │   │   ├── video-player.component.ts*/
+/*│   │   │   │   ├── video-player.component.html*/
+/*│   │   │   │   ├── video-player.component.css*/
+/*│   │   │   │   ├── video-player.component.spec.ts*/
+/*│   │   │   │   │*/
+/*│   │   │   │   ├── components/*/
+/*│   │   │   │   │   ├── hls-player/*/
+/*│   │   │   │   │   │   ├── hls-player.component.ts*/
+/*│   │   │   │   │   │   ├── hls-player.component.html*/
+/*│   │   │   │   │   │   ├── hls-player.component.css*/
+/*│   │   │   │   │   │   └── hls-player.component.spec.ts*/
+/*│   │   │   │   │   │*/
+/*│   │   │   │   │   ├── video-controls/*/
+/*│   │   │   │   │   │   ├── video-controls.component.ts*/
+/*│   │   │   │   │   │   ├── video-controls.component.html*/
+/*│   │   │   │   │   │   ├── video-controls.component.css*/
+/*│   │   │   │   │   │   └── video-controls.component.spec.ts*/
+/*│   │   │   │   │   │*/
+/*│   │   │   │   │   ├── quality-selector/*/
+/*│   │   │   │   │   │   ├── quality-selector.component.ts*/
+/*│   │   │   │   │   │   ├── quality-selector.component.html*/
+/*│   │   │   │   │   │   ├── quality-selector.component.css*/
+/*│   │   │   │   │   │   └── quality-selector.component.spec.ts*/
+/*│   │   │   │   │   │*/
+/*│   │   │   │   │   └── video-info/*/
+/*│   │   │   │   │       ├── video-info.component.ts*/
+/*│   │   │   │   │       ├── video-info.component.html*/
+/*│   │   │   │   │       ├── video-info.component.css*/
+/*│   │   │   │   │       └── video-info.component.spec.ts*/
+/*│   │   │   │   │*/
+/*│   │   │   │   └── services/*/
+/*│   │   │   │       ├── hls-player.service.ts*/
+/*│   │   │   │       └── video-analytics.service.ts*/
+/*│   │   │   │*/
+/*│   │   │   ├── video-detail/*/
+/*│   │   │   │   ├── video-detail.component.ts*/
+/*│   │   │   │   ├── video-detail.component.html*/
+/*│   │   │   │   ├── video-detail.component.css*/
+/*│   │   │   │   ├── video-detail.component.spec.ts*/
+/*│   │   │   │   │*/
+/*│   │   │   │   └── components/*/
+/*│   │   │   │       ├── processing-status/*/
+/*│   │   │   │       │   ├── processing-status.component.ts*/
+/*│   │   │   │       │   ├── processing-status.component.html*/
+/*│   │   │   │       │   ├── processing-status.component.css*/
+/*│   │   │   │       │   └── processing-status.component.spec.ts*/
+/*│   │   │   │       │*/
+/*│   │   │   │       └── video-metadata/*/
+/*│   │   │   │           ├── video-metadata.component.ts*/
+/*│   │   │   │           ├── video-metadata.component.html*/
+/*│   │   │   │           ├── video-metadata.component.css*/
+/*│   │   │   │           └── video-metadata.component.spec.ts*/
+/*│   │   │   │*/
+/*│   │   │   └── system-stats/*/
+/*│   │   │       ├── system-stats.component.ts*/
+/*│   │   │       ├── system-stats.component.html*/
+/*│   │   │       ├── system-stats.component.css*/
+/*│   │   │       ├── system-stats.component.spec.ts*/
+/*│   │   │       │*/
+/*│   │   │       └── components/*/
+/*│   │   │           ├── health-status/*/
+/*│   │   │           │   ├── health-status.component.ts*/
+/*│   │   │           │   ├── health-status.component.html*/
+/*│   │   │           │   ├── health-status.component.css*/
+/*│   │   │           │   └── health-status.component.spec.ts*/
+/*│   │   │           │*/
+/*│   │   │           └── statistics-dashboard/*/
+/*│   │   │               ├── statistics-dashboard.component.ts*/
+/*│   │   │               ├── statistics-dashboard.component.html*/
+/*│   │   │               ├── statistics-dashboard.component.css*/
+/*│   │   │               └── statistics-dashboard.component.spec.ts*/
+/*│   │   │*/
+/*│   │   └── layout/*/
+/*│   │       ├── main-layout/*/
+/*│   │       │   ├── main-layout.component.ts*/
+/*│   │       │   ├── main-layout.component.html*/
+/*│   │       │   ├── main-layout.component.css*/
+/*│   │       │   └── main-layout.component.spec.ts*/
+/*│   │       │*/
+/*│   │       └── minimal-layout/*/
+/*│   │           ├── minimal-layout.component.ts*/
+/*│   │           ├── minimal-layout.component.html*/
+/*│   │           ├── minimal-layout.component.css*/
+/*│   │           └── minimal-layout.component.spec.ts*/
+/*│   │*/
+/*│   ├── assets/*/
+/*│   │   ├── images/*/
+/*│   │   │   ├── logo.svg*/
+/*│   │   │   ├── upload-placeholder.svg*/
+/*│   │   │   ├── video-placeholder.svg*/
+/*│   │   │   └── icons/*/
+/*│   │   │       ├── play.svg*/
+/*│   │   │       ├── pause.svg*/
+/*│   │   │       ├── upload.svg*/
+/*│   │   │       ├── search.svg*/
+/*│   │   │       └── filter.svg*/
+/*│   │   │*/
+/*│   │   ├── styles/*/
+/*│   │   │   ├── _variables.css*/
+/*│   │   │   ├── _mixins.css*/
+/*│   │   │   ├── _utilities.css*/
+/*│   │   │   ├── _components.css*/
+/*│   │   │   └── _themes.css*/
+/*│   │   │*/
+/*│   │   └── fonts/*/
+/*│   │       └── (custom fonts if any)*/
+/*│   │*/
+/*│   └── environments/*/
+/*│       ├── environment.ts*/
+/*│       ├── environment.prod.ts*/
+/*│       └── environment.staging.ts*/
+/*│*/
+/*├── cypress/*/
+/*│   ├── e2e/*/
+/*│   │   ├── video-upload.cy.ts*/
+/*│   │   ├── video-streaming.cy.ts*/
+/*│   │   ├── video-search.cy.ts*/
+/*│   │   └── app.cy.ts*/
+/*│   │*/
+/*│   ├── fixtures/*/
+/*│   │   └── test-video.mp4*/
+/*│   │*/
+/*│   └── support/*/
+/*│       ├── commands.ts*/
+/*│       └── e2e.ts*/
+/*│*/
+/*├── docs/*/
+/*│   ├── DEVELOPMENT.md*/
+/*│   ├── DEPLOYMENT.md*/
+/*│   ├── TESTING.md*/
+/*│   └── API_INTEGRATION.md*/
+/*│*/
+/*└── scripts/*/
+/*├── build.sh*/
+/*├── deploy.sh*/
+/*└── test.sh*/
