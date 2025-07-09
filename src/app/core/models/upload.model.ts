@@ -6,7 +6,7 @@ export interface UploadRequest {
 }
 
 export interface UploadProgress {
-  id?: string;
+  id: string;
   filename: string;
   size: number;
   uploaded: number;
