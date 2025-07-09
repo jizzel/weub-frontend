@@ -33,6 +33,9 @@ export const environment = {
     statusInterval: 10000, // 10 seconds
     maxRetries: 5,
     retryDelay: 2000,
+    baseDelay: 1000,
+    maxDelay: 30000
+
   },
   logging: {
     level: 'error',

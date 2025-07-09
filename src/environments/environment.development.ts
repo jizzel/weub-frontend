@@ -33,6 +33,8 @@ export const environment = {
     statusInterval: 5000, // 5 seconds
     maxRetries: 3,
     retryDelay: 1000,
+    baseDelay: 1000,
+    maxDelay: 30000
   },
   logging: {
     level: 'debug',
