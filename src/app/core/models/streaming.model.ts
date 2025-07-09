@@ -33,3 +33,11 @@ export interface PlayerConfig {
   playbackRates: number[];
   defaultQuality?: VideoResolution;
 }
+
+export type SortField = 'createdAt' | 'title' | 'duration' | 'fileSize';
+export type SortOrder = 'asc' | 'desc';
+
+export interface SortOption {
+  field: SortField;
+  order: SortOrder;
+}
