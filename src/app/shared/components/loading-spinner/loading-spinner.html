@@ -1,0 +1,17 @@
+<div
+  class="flex items-center justify-center"
+  [class]="containerClass"
+  [attr.aria-label]="ariaLabel"
+  role="status"
+>
+  <div
+    class="animate-spin rounded-full border-solid border-current"
+    [class]="spinnerClass"
+    [style.border-width]="borderWidth"
+    [style.border-top-color]="'transparent'"
+  ></div>
+
+  <div *ngIf="showText && text" class="ml-2 text-sm" [class]="textClass">
+    {{ text }}
+  </div>
+</div>
