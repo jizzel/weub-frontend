@@ -4,10 +4,6 @@
 
 Weub is a minimal video-sharing application enabling anonymous users to upload, search, and stream videos in adaptive quality. This document outlines best practices, component architecture, integration flows, and conventions to ensure consistent, efficient, and scalable frontend development using Angular 20, Tailwind CSS, and hls.js.
 
-## Current Project State
-
-The project is currently in its initial setup phase with a basic Angular 20 application structure. The guidelines below represent the target architecture and best practices to be implemented as the project evolves.
-
 ## Recommended Folder Structure
 
 The project should follow a modular and feature-driven structure:
