@@ -1,0 +1,67 @@
+<div
+  class="dropzone"
+  [class.drag-active]="isDragActive"
+  [class.disabled]="disabled"
+  appFileDrop
+  [allowedTypes]="allowedTypes"
+  [maxFileSize]="maxFileSize"
+  [multiple]="false"
+  [disabled]="disabled"
+  (filesDropped)="onFilesDropped($event)"
+  (filesHovered)="onFilesHovered($event)"
+  (filesRejected)="onFilesRejected($event)"
+  (click)="openFileDialog()"
+>
+  <input
+    #fileInput
+    type="file"
+    class="hidden"
+    [accept]="acceptAttribute"
+    [disabled]="disabled"
+    (change)="onFileSelected($event)"
+  />
+
+  <div class="dropzone-content">
+    <!-- Upload Icon -->
+    <div class="upload-icon">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <polyline points="14,2 14,8 20,8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <line x1="12" y1="18" x2="12" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <polyline points="9,15 12,12 15,15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+
+    <!-- Main Text -->
+    <div class="upload-text">
+      <h3 class="text-lg font-semibold text-gray-900 mb-2">
+        {{ isDragActive ? 'Drop your video here' : 'Upload Video' }}
+      </h3>
+      <p class="text-sm text-gray-600 mb-4">
+        {{ isDragActive ? 'Release to upload' : 'Drag and drop your video file here, or click to browse' }}
+      </p>
+    </div>
+
+    <!-- File Info -->
+    <div class="file-info text-xs text-gray-500">
+      <div class="mb-1">
+        <span class="font-medium">Supported formats:</span>
+        {{ formatAllowedTypes() }}
+      </div>
+      <div>
+        <span class="font-medium">Maximum size:</span>
+        {{ formatMaxFileSize() }}
+      </div>
+    </div>
+
+    <!-- Error Message -->
+    <div *ngIf="errorMessage" class="error-message mt-4 p-3 bg-red-50 border border-red-200 rounded-md">
+      <div class="flex items-center">
+        <svg class="w-4 h-4 text-red-600 mr-2" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+        </svg>
+        <span class="text-sm text-red-800">{{ errorMessage }}</span>
+      </div>
+    </div>
+  </div>
+</div>
