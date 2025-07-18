@@ -1,0 +1,86 @@
+<div
+  *ngIf="visible"
+  class="rounded-lg border p-4 mb-4"
+  [class]="containerClass"
+  role="alert"
+  [attr.aria-live]="'polite'"
+>
+  <div class="flex items-start">
+    <!-- Error Icon -->
+    <div class="flex-shrink-0">
+      <svg
+        class="w-5 h-5"
+        [class]="iconClass"
+        fill="currentColor"
+        viewBox="0 0 20 20"
+      >
+        <path
+          fill-rule="evenodd"
+          d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+          clip-rule="evenodd"
+        />
+      </svg>
+    </div>
+
+    <!-- Content -->
+    <div class="ml-3 flex-1">
+      <h3 *ngIf="title" class="font-medium" [class]="titleClass">
+        {{ title }}
+      </h3>
+
+      <div class="mt-1" [class]="messageClass">
+        <p>{{ message }}</p>
+
+        <!-- Additional Details -->
+        <div *ngIf="details && showDetails" class="mt-2">
+          <details class="cursor-pointer">
+            <summary class="text-sm underline">Technical Details</summary>
+            <pre class="mt-2 text-xs bg-gray-100 p-2 rounded overflow-auto max-h-32">{{ details | json }}</pre>
+          </details>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div *ngIf="showActions" class="mt-3 flex space-x-2">
+        <button
+          *ngIf="retryable"
+          type="button"
+          class="text-sm font-medium underline hover:no-underline focus:outline-none focus:underline"
+          [class]="actionClass"
+          (click)="onRetry()"
+        >
+          Try Again
+        </button>
+
+        <button
+          *ngIf="dismissible"
+          type="button"
+          class="text-sm font-medium underline hover:no-underline focus:outline-none focus:underline"
+          [class]="actionClass"
+          (click)="onDismiss()"
+        >
+          Dismiss
+        </button>
+      </div>
+    </div>
+
+    <!-- Close Button -->
+    <div *ngIf="dismissible" class="ml-4 flex-shrink-0">
+      <button
+        type="button"
+        class="rounded-md inline-flex focus:outline-none focus:ring-2 focus:ring-offset-2"
+        [class]="closeButtonClass"
+        (click)="onDismiss()"
+        aria-label="Close error message"
+      >
+        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+          <path
+            fill-rule="evenodd"
+            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+            clip-rule="evenodd"
+          />
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
