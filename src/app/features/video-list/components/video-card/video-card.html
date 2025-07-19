@@ -1,0 +1,134 @@
+<div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden">
+  <!-- Thumbnail Section -->
+  <div class="relative aspect-video bg-gray-200 overflow-hidden">
+    <img
+      *ngIf="video.thumbnailUrl && video.status === 'ready'; else placeholderThumbnail"
+      [src]="video.thumbnailUrl"
+      [alt]="video.title"
+      class="w-full h-full object-cover"
+      loading="lazy"
+    >
+
+    <ng-template #placeholderThumbnail>
+      <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-300 to-gray-400">
+        <svg class="w-16 h-16 text-gray-500" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M8 5v14l11-7z"/>
+        </svg>
+      </div>
+    </ng-template>
+
+    <!-- Status Overlay -->
+    <div class="absolute top-2 left-2">
+          <span
+            class="px-2 py-1 text-xs font-medium rounded-full"
+            [ngClass]="{
+              'bg-yellow-100 text-yellow-800': video.status === 'pending',
+              'bg-blue-100 text-blue-800': video.status === 'processing',
+              'bg-green-100 text-green-800': video.status === 'ready',
+              'bg-red-100 text-red-800': video.status === 'failed'
+            }"
+          >
+            {{ getStatusText(video.status) }}
+          </span>
+    </div>
+
+    <!-- Duration Badge -->
+    <div *ngIf="video.duration && video.status === 'ready'"
+         class="absolute bottom-2 right-2 bg-black bg-opacity-70 text-white text-xs px-2 py-1 rounded">
+      {{ formatDuration(video.duration) }}
+    </div>
+
+    <!-- Play Button Overlay -->
+    <div *ngIf="video.status === 'ready'"
+         class="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300 bg-black bg-opacity-30 cursor-pointer"
+         (click)="onPlayClick()">
+      <div class="bg-white rounded-full p-3 shadow-lg">
+        <svg class="w-8 h-8 text-gray-800" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M8 5v14l11-7z"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- Content Section -->
+  <div class="p-4">
+    <!-- Title -->
+    <h3 class="font-semibold text-gray-900 text-lg mb-2 line-clamp-2 hover:text-blue-600 cursor-pointer"
+        (click)="onTitleClick()">
+      {{ video.title }}
+    </h3>
+
+    <!-- Metadata -->
+    <div class="flex items-center text-sm text-gray-600 mb-3">
+      <span>{{ formatUploadDate(video.uploadDate) }}</span>
+      <span *ngIf="video.fileSize" class="mx-2">•</span>
+      <span *ngIf="video.fileSize">{{ formatFileSize(video.fileSize) }}</span>
+    </div>
+
+    <!-- Available Resolutions -->
+    <div *ngIf="video.status === 'ready' && video.availableResolutions.length > 0"
+         class="flex flex-wrap gap-1 mb-3">
+      <span class="text-xs text-gray-500 mr-2">Quality:</span>
+      <span *ngFor="let resolution of video.availableResolutions"
+            class="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-full">
+            {{ resolution }}
+          </span>
+    </div>
+
+    <!-- Tags -->
+    <div *ngIf="video.tags && video.tags.length > 0" class="flex flex-wrap gap-1 mb-3">
+          <span *ngFor="let tag of video.tags.slice(0, 3)"
+                class="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded-full cursor-pointer hover:bg-blue-200"
+                (click)="onTagClick(tag)">
+            #{{ tag }}
+          </span>
+      <span *ngIf="video.tags.length > 3"
+            class="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded-full">
+            +{{ video.tags.length - 3 }}
+          </span>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="flex items-center justify-between pt-3 border-t border-gray-100">
+      <button
+        *ngIf="video.status === 'ready'"
+        (click)="onPlayClick()"
+        class="flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 transition-colors">
+        <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M8 5v14l11-7z"/>
+        </svg>
+        Play
+      </button>
+
+      <button
+        *ngIf="video.status === 'failed'"
+        (click)="onRetryClick()"
+        class="flex items-center px-4 py-2 bg-red-600 text-white text-sm font-medium rounded-md hover:bg-red-700 transition-colors">
+        <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+        </svg>
+        Retry
+      </button>
+
+      <div class="flex items-center space-x-2">
+        <button
+          (click)="onShareClick()"
+          class="p-2 text-gray-400 hover:text-gray-600 transition-colors"
+          title="Share">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z"/>
+          </svg>
+        </button>
+
+        <button
+          (click)="onMoreClick()"
+          class="p-2 text-gray-400 hover:text-gray-600 transition-colors"
+          title="More options">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
