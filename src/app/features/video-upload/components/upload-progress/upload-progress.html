@@ -1,0 +1,133 @@
+<div class="upload-progress-container" *ngIf="visibleUploads.length > 0">
+  <!-- Header with overall progress -->
+  <div class="upload-progress-header">
+    <div class="header-info">
+      <h3 class="header-title">
+        <span class="upload-icon">📤</span>
+        Upload Progress
+        <span class="upload-count">({{ visibleUploads.length }})</span>
+      </h3>
+
+      <div class="header-actions" *ngIf="hasCompletedUploads">
+        <button
+          type="button"
+          class="btn-clear-completed"
+          (click)="onClearCompleted()"
+          title="Clear completed uploads">
+          Clear Completed
+        </button>
+      </div>
+    </div>
+
+    <!-- Overall progress bar (only show if there are active uploads) -->
+    <div class="overall-progress" *ngIf="hasActiveUploads">
+      <div class="overall-progress-bar">
+        <div
+          class="overall-progress-fill"
+          [style.width.%]="totalProgress">
+        </div>
+      </div>
+      <span class="overall-progress-text">{{ totalProgress }}% overall</span>
+    </div>
+  </div>
+
+  <!-- Upload items list -->
+  <div class="upload-items">
+    <div
+      class="upload-item"
+      [class]="'status-' + item.status"
+      *ngFor="let item of visibleUploads; trackBy: trackByUploadId">
+
+      <!-- File info -->
+      <div class="upload-item-header">
+        <div class="file-info">
+          <div class="file-icon">
+            <span class="status-icon">{{ getStatusIcon(item.status) }}</span>
+          </div>
+
+          <div class="file-details">
+            <div class="file-name" [title]="item.filename">
+              {{ item.filename }}
+            </div>
+            <div class="file-meta">
+              <span class="file-size">{{ formatFileSize(item.size) }}</span>
+              <span class="status-text">{{ getStatusText(item.status) }}</span>
+              <span class="upload-speed" *ngIf="item.speed && item.status === 'uploading'">
+                {{ formatSpeed(item.speed) }}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="upload-actions">
+          <button
+            type="button"
+            class="btn-action btn-cancel"
+            *ngIf="canCancel(item.status)"
+            (click)="onCancelUpload(item.id)"
+            title="Cancel upload">
+            ✕
+          </button>
+
+          <button
+            type="button"
+            class="btn-action btn-retry"
+            *ngIf="canRetry(item.status)"
+            (click)="onRetryUpload(item.id)"
+            title="Retry upload">
+            🔄
+          </button>
+
+          <button
+            type="button"
+            class="btn-action btn-remove"
+            *ngIf="canRemove(item.status)"
+            (click)="onRemoveItem(item.id)"
+            title="Remove from list">
+            🗑️
+          </button>
+        </div>
+      </div>
+
+      <!-- Progress bar -->
+      <div class="progress-section" *ngIf="item.status !== 'completed' || item.progress < 100">
+        <div class="progress-bar">
+          <div
+            class="progress-fill"
+            [class]="getProgressBarClass(item.status)"
+            [style.width.%]="item.progress">
+          </div>
+        </div>
+
+        <div class="progress-info">
+          <span class="progress-percentage">{{ item.progress }}%</span>
+          <span class="progress-details" *ngIf="item.status === 'uploading'">
+            {{ formatFileSize(item.uploaded) }} / {{ formatFileSize(item.size) }}
+          </span>
+          <span class="time-remaining" *ngIf="item.estimatedTimeRemaining">
+            {{ formatTimeRemaining(item.estimatedTimeRemaining) }}
+          </span>
+        </div>
+      </div>
+
+      <!-- Error message -->
+      <div class="error-message" *ngIf="item.error && item.status === 'failed'">
+        <span class="error-icon">⚠️</span>
+        <span class="error-text">{{ item.error }}</span>
+      </div>
+
+      <!-- Success message -->
+      <div class="success-message" *ngIf="item.status === 'completed'">
+        <span class="success-icon">🎉</span>
+        <span class="success-text">Upload completed successfully!</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Empty state -->
+<div class="upload-progress-empty" *ngIf="visibleUploads.length === 0 && uploads.length === 0">
+  <div class="empty-icon">📁</div>
+  <p class="empty-text">No uploads in progress</p>
+</div>
