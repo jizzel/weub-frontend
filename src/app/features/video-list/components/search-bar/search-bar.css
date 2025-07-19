@@ -1,0 +1,220 @@
+:host {
+  display: block;
+}
+
+/* Search input container */
+.search-container {
+  position: relative;
+}
+
+/* Search input focus effects */
+.search-input:focus {
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  border-color: #3b82f6;
+}
+
+/* Search suggestions dropdown */
+.suggestions-dropdown {
+  backdrop-filter: blur(8px);
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(229, 231, 235, 0.8);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.suggestion-item {
+  transition: all 0.15s ease-in-out;
+}
+
+.suggestion-item:hover {
+  background-color: #f8fafc;
+  padding-left: 1.25rem;
+}
+
+.suggestion-item.selected {
+  background-color: #eff6ff;
+  border-left: 3px solid #3b82f6;
+}
+
+/* Search type selector */
+.search-type-selector {
+  min-width: 140px;
+}
+
+/* Advanced search toggle */
+.advanced-toggle {
+  transition: all 0.2s ease-in-out;
+}
+
+.advanced-toggle:hover {
+  transform: translateY(-1px);
+}
+
+.advanced-toggle.active {
+  background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+  border-color: #93c5fd;
+}
+
+/* Advanced search panel */
+.advanced-panel {
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+    max-height: 0;
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    max-height: 200px;
+  }
+}
+
+/* Recent searches pills */
+.recent-search-pill {
+  transition: all 0.2s ease-in-out;
+}
+
+.recent-search-pill:hover {
+  background-color: #e5e7eb;
+  transform: scale(1.05);
+}
+
+/* Search stats section */
+.search-stats {
+  border-top: 1px solid #f3f4f6;
+  background: linear-gradient(to right, #f9fafb, #ffffff);
+}
+
+/* Clear button animation */
+.clear-btn {
+  transition: all 0.2s ease-in-out;
+}
+
+.clear-btn:hover {
+  transform: rotate(90deg);
+  color: #ef4444;
+}
+
+/* Search button pulse effect */
+.search-btn {
+  transition: all 0.2s ease-in-out;
+}
+
+.search-btn:hover {
+  transform: scale(1.1);
+  color: #1d4ed8;
+}
+
+/* Loading state for search */
+.search-loading {
+  position: relative;
+}
+
+.search-loading::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  width: 12px;
+  height: 12px;
+  margin-top: -6px;
+  border: 2px solid #d1d5db;
+  border-radius: 50%;
+  border-top-color: #3b82f6;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Checkbox and input styling in advanced panel */
+.advanced-panel input[type="checkbox"] {
+  transition: all 0.2s ease-in-out;
+}
+
+.advanced-panel input[type="checkbox"]:checked {
+  background-color: #3b82f6;
+  transform: scale(1.1);
+}
+
+.advanced-panel input[type="number"] {
+  transition: border-color 0.2s ease-in-out;
+}
+
+.advanced-panel input[type="number"]:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 1px #3b82f6;
+}
+
+/* Responsive design */
+@media (max-width: 640px) {
+  .search-container {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .search-type-selector {
+    min-width: unset;
+    width: 100%;
+  }
+
+  .advanced-toggle {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .suggestions-dropdown {
+    left: 0;
+    right: 0;
+  }
+
+  .advanced-panel .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .search-stats {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: more) {
+  .suggestions-dropdown {
+    border-width: 2px;
+    background: white;
+  }
+
+  .suggestion-item.selected {
+    background-color: #000;
+    color: #fff;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .suggestion-item,
+  .clear-btn,
+  .search-btn,
+  .advanced-toggle,
+  .recent-search-pill {
+    transition: none;
+  }
+
+  .advanced-panel {
+    animation: none;
+  }
+
+  @keyframes spin {
+    to {
+      transform: none;
+    }
+  }
+}

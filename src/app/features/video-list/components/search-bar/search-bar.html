@@ -1,0 +1,371 @@
+<div class="bg-white rounded-lg shadow-sm border p-4 mb-4">
+  <div class="flex flex-col sm:flex-row gap-4">
+    <!-- Search Input -->
+    <div class="flex-1 relative">
+      <div class="relative">
+        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+          <svg class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+          </svg>
+        </div>
+        <input
+          #searchInput
+          type="text"
+          [(ngModel)]="searchTerm"
+          (input)="onSearchInput()"
+          (keydown.enter)="onSearchSubmit()"
+          (focus)="onSearchFocus()"
+          (blur)="onSearchBlur()"
+          placeholder="Search videos by title, tags, or description..."
+          class="block w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+          [class.border-blue-500]="isSearchFocused"
+        />
+        <div class="absolute inset-y-0 right-0 flex items-center">
+          <!-- Clear Button -->
+          <button
+            *ngIf="searchTerm"
+            (click)="clearSearch()"
+            class="p-2 text-gray-400 hover:text-gray-600 mr-1"
+            title="Clear search"
+          >
+            <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+            </svg>
+          </button>
+          <!-- Search Button -->
+          <button
+            (click)="onSearchSubmit()"
+            class="p-2 text-blue-600 hover:text-blue-800 mr-2"
+            title="Search"
+          >
+            <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Search Suggestions Dropdown -->
+      <div
+        *ngIf="showSuggestions && searchSuggestions.length > 0"
+        class="absolute z-10 mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-auto"
+      >
+        <div class="py-2">
+          <div
+            *ngFor="let suggestion of searchSuggestions; let i = index"
+            (click)="selectSuggestion(suggestion)"
+            class="px-4 py-2 hover:bg-gray-50 cursor-pointer text-sm"
+            [class.bg-blue-50]="i === selectedSuggestionIndex"
+          >
+            <div class="flex items-center">
+              <svg class="h-4 w-4 text-gray-400 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+              </svg>
+              {{ suggestion }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Search Type Selector -->
+    <div class="sm:w-48">
+      <select
+        [(ngModel)]="searchIn"
+        (ngModelChange)="onSearchTypeChange()"
+        class="w-full px-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+      >
+        <option value="all">Search All</option>
+        <option value="title">Title Only</option>
+        <option value="tags">Tags Only</option>
+        <option value="description">Description Only</option>
+      </select>
+    </div>
+
+    <!-- Advanced Search Toggle -->
+    <button
+      (click)="toggleAdvancedSearch()"
+      class="px-4 py-3 text-sm font-medium text-gray-700 bg-gray-50 border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+      [class.bg-blue-50]="showAdvancedSearch"
+      [class.text-blue-700]="showAdvancedSearch"
+      [class.border-blue-300]="showAdvancedSearch"
+    >
+      <div class="flex items-center">
+        <svg class="h-4 w-4 mr-2" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z" clip-rule="evenodd" />
+        </svg>
+        Advanced
+      </div>
+    </button>
+  </div>
+
+  <!-- Advanced Search Options -->
+  <div *ngIf="showAdvancedSearch" class="mt-4 p-4 bg-gray-50 rounded-lg border">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <!-- Exact Match -->
+      <div class="flex items-center">
+        <input
+          id="exactMatch"
+          type="checkbox"
+          [(ngModel)]="exactMatch"
+          (ngModelChange)="onAdvancedOptionChange()"
+          class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+        />
+        <label for="exactMatch" class="ml-2 text-sm text-gray-700">
+          Exact phrase match
+        </label>
+      </div>
+
+      <!-- Case Sensitive -->
+      <div class="flex items-center">
+        <input
+          id="caseSensitive"
+          type="checkbox"
+          [(ngModel)]="caseSensitive"
+          (ngModelChange)="onAdvancedOptionChange()"
+          class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+        />
+        <label for="caseSensitive" class="ml-2 text-sm text-gray-700">
+          Case sensitive
+        </label>
+      </div>
+
+      <!-- Include Archived -->
+      <div class="flex items-center">
+        <input
+          id="includeArchived"
+          type="checkbox"
+          [(ngModel)]="includeArchived"
+          (ngModelChange)="onAdvancedOptionChange()"
+          class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+        />
+        <label for="includeArchived" class="ml-2 text-sm text-gray-700">
+          Include archived videos
+        </label>
+      </div>
+
+      <!-- Minimum Duration -->
+      <div class="flex items-center space-x-2">
+        <label for="minDuration" class="text-sm text-gray-700">
+          Min duration (sec):
+        </label>
+        <input
+          id="minDuration"
+          type="number"
+          [(ngModel)]="minDuration"
+          (ngModelChange)="onAdvancedOptionChange()"
+          min="0"
+          placeholder="0"
+          class="w-20 px-2 py-1 border border-gray-300 rounded focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-sm"
+        />
+      </div>
+    </div>
+  </div>
+
+  <!-- Search Stats -->
+  <div *ngIf="searchTerm || recentSearches.length > 0" class="mt-4 flex items-center justify-between text-sm text-gray-500">
+    <div *ngIf="searchTerm" class="flex items-center">
+      <span>Searching for: </span>
+      <span class="font-medium text-gray-700 ml-1">"{{ searchTerm }}"</span>
+      <span class="ml-2" *ngIf="searchIn !== 'all'">in {{ searchIn }}</span>
+    </div>
+
+    <!-- Recent Searches -->
+    <div *ngIf="recentSearches.length > 0 && !searchTerm" class="flex items-center space-x-2">
+      <span>Recent:</span>
+      <button
+        *ngFor="let recent of recentSearches.slice(0, 3)"
+        (click)="selectRecentSearch(recent)"
+        class="px-2 py-1 bg-gray-100 hover:bg-gray-200 rounded text-xs"
+      >
+        {{ recent }}
+      </button>
+    </div>
+  </div>
+</div>
+
+<!--<div class="bg-white rounded-lg shadow-sm border p-4 mb-4">-->
+<!--  <div class="flex flex-col sm:flex-row gap-4">-->
+<!--    &lt;!&ndash; Search Input &ndash;&gt;-->
+<!--    <div class="flex-1 relative">-->
+<!--      <div class="relative">-->
+<!--        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">-->
+<!--          <svg class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">-->
+<!--            <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />-->
+<!--          </svg>-->
+<!--        </div>-->
+<!--        <input-->
+<!--          #searchInput-->
+<!--          type="text"-->
+<!--          [(ngModel)]="searchTerm"-->
+<!--          (input)="onSearchInput()"-->
+<!--          (keydown.enter)="onSearchSubmit()"-->
+<!--          (focus)="onSearchFocus()"-->
+<!--          (blur)="onSearchBlur()"-->
+<!--          placeholder="Search videos by title, tags, or description..."-->
+<!--          class="block w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"-->
+<!--          [class.border-blue-500]="isSearchFocused"-->
+<!--        />-->
+<!--        <div class="absolute inset-y-0 right-0 flex items-center">-->
+<!--          &lt;!&ndash; Clear Button &ndash;&gt;-->
+<!--          <button-->
+<!--            *ngIf="searchTerm"-->
+<!--            (click)="clearSearch()"-->
+<!--            class="p-2 text-gray-400 hover:text-gray-600 mr-1"-->
+<!--            title="Clear search"-->
+<!--          >-->
+<!--            <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">-->
+<!--              <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />-->
+<!--            </svg>-->
+<!--          </button>-->
+<!--          &lt;!&ndash; Search Button &ndash;&gt;-->
+<!--          <button-->
+<!--            (click)="onSearchSubmit()"-->
+<!--            class="p-2 text-blue-600 hover:text-blue-800 mr-2"-->
+<!--            title="Search"-->
+<!--          >-->
+<!--            <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">-->
+<!--              <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />-->
+<!--            </svg>-->
+<!--          </button>-->
+<!--        </div>-->
+<!--      </div>-->
+
+<!--      &lt;!&ndash; Search Suggestions Dropdown &ndash;&gt;-->
+<!--      <div-->
+<!--        *ngIf="showSuggestions && searchSuggestions.length > 0"-->
+<!--        class="absolute z-10 mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-auto"-->
+<!--      >-->
+<!--        <div class="py-2">-->
+<!--          <div-->
+<!--            *ngFor="let suggestion of searchSuggestions; let i = index"-->
+<!--            (click)="selectSuggestion(suggestion)"-->
+<!--            class="px-4 py-2 hover:bg-gray-50 cursor-pointer text-sm"-->
+<!--            [class.bg-blue-50]="i === selectedSuggestionIndex"-->
+<!--          >-->
+<!--            <div class="flex items-center">-->
+<!--              <svg class="h-4 w-4 text-gray-400 mr-2" viewBox="0 0 20 20" fill="currentColor">-->
+<!--                <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />-->
+<!--              </svg>-->
+<!--              {{ suggestion }}-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+
+<!--    &lt;!&ndash; Search Type Selector &ndash;&gt;-->
+<!--    <div class="sm:w-48">-->
+<!--      <select-->
+<!--        [(ngModel)]="searchIn"-->
+<!--        (ngModelChange)="onSearchTypeChange()"-->
+<!--        class="w-full px-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"-->
+<!--      >-->
+<!--        <option value="all">Search All</option>-->
+<!--        <option value="title">Title Only</option>-->
+<!--        <option value="tags">Tags Only</option>-->
+<!--        <option value="description">Description Only</option>-->
+<!--      </select>-->
+<!--    </div>-->
+
+<!--    &lt;!&ndash; Advanced Search Toggle &ndash;&gt;-->
+<!--    <button-->
+<!--      (click)="toggleAdvancedSearch()"-->
+<!--      class="px-4 py-3 text-sm font-medium text-gray-700 bg-gray-50 border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"-->
+<!--      [class.bg-blue-50]="showAdvancedSearch"-->
+<!--      [class.text-blue-700]="showAdvancedSearch"-->
+<!--      [class.border-blue-300]="showAdvancedSearch"-->
+<!--    >-->
+<!--      <div class="flex items-center">-->
+<!--        <svg class="h-4 w-4 mr-2" viewBox="0 0 20 20" fill="currentColor">-->
+<!--          <path fill-rule="evenodd" d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z" clip-rule="evenodd" />-->
+<!--        </svg>-->
+<!--        Advanced-->
+<!--      </div>-->
+<!--    </button>-->
+<!--  </div>-->
+
+<!--  &lt;!&ndash; Advanced Search Options &ndash;&gt;-->
+<!--  <div *ngIf="showAdvancedSearch" class="mt-4 p-4 bg-gray-50 rounded-lg border">-->
+<!--    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">-->
+<!--      &lt;!&ndash; Exact Match &ndash;&gt;-->
+<!--      <div class="flex items-center">-->
+<!--        <input-->
+<!--          id="exactMatch"-->
+<!--          type="checkbox"-->
+<!--          [(ngModel)]="exactMatch"-->
+<!--          (ngModelChange)="onAdvancedOptionChange()"-->
+<!--          class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"-->
+<!--        />-->
+<!--        <label for="exactMatch" class="ml-2 text-sm text-gray-700">-->
+<!--          Exact phrase match-->
+<!--        </label>-->
+<!--      </div>-->
+
+<!--      &lt;!&ndash; Case Sensitive &ndash;&gt;-->
+<!--      <div class="flex items-center">-->
+<!--        <input-->
+<!--          id="caseSensitive"-->
+<!--          type="checkbox"-->
+<!--          [(ngModel)]="caseSensitive"-->
+<!--          (ngModelChange)="onAdvancedOptionChange()"-->
+<!--          class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"-->
+<!--        />-->
+<!--        <label for="caseSensitive" class="ml-2 text-sm text-gray-700">-->
+<!--          Case sensitive-->
+<!--        </label>-->
+<!--      </div>-->
+
+<!--      &lt;!&ndash; Include Archived &ndash;&gt;-->
+<!--      <div class="flex items-center">-->
+<!--        <input-->
+<!--          id="includeArchived"-->
+<!--          type="checkbox"-->
+<!--          [(ngModel)]="includeArchived"-->
+<!--          (ngModelChange)="onAdvancedOptionChange()"-->
+<!--          class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"-->
+<!--        />-->
+<!--        <label for="includeArchived" class="ml-2 text-sm text-gray-700">-->
+<!--          Include archived videos-->
+<!--        </label>-->
+<!--      </div>-->
+
+<!--      &lt;!&ndash; Minimum Duration &ndash;&gt;-->
+<!--      <div class="flex items-center space-x-2">-->
+<!--        <label for="minDuration" class="text-sm text-gray-700">-->
+<!--          Min duration (sec):-->
+<!--        </label>-->
+<!--        <input-->
+<!--          id="minDuration"-->
+<!--          type="number"-->
+<!--          [(ngModel)]="minDuration"-->
+<!--          (ngModelChange)="onAdvancedOptionChange()"-->
+<!--          min="0"-->
+<!--          placeholder="0"-->
+<!--          class="w-20 px-2 py-1 border border-gray-300 rounded focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-sm"-->
+<!--        />-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+
+<!--  &lt;!&ndash; Search Stats &ndash;&gt;-->
+<!--  <div *ngIf="searchTerm || recentSearches.length > 0" class="mt-4 flex items-center justify-between text-sm text-gray-500">-->
+<!--    <div *ngIf="searchTerm" class="flex items-center">-->
+<!--      <span>Searching for: </span>-->
+<!--      <span class="font-medium text-gray-700 ml-1">"{{ searchTerm }}"</span>-->
+<!--      <span class="ml-2" *ngIf="searchIn !== 'all'">in {{ searchIn }}</span>-->
+<!--    </div>-->
+
+<!--    &lt;!&ndash; Recent Searches &ndash;&gt;-->
+<!--    <div *ngIf="recentSearches.length > 0 && !searchTerm" class="flex items-center space-x-2">-->
+<!--      <span>Recent:</span>-->
+<!--      <button-->
+<!--        *ngFor="let recent of recentSearches.slice(0, 3)"-->
+<!--        (click)="selectRecentSearch(recent)"-->
+<!--        class="px-2 py-1 bg-gray-100 hover:bg-gray-200 rounded text-xs"-->
+<!--      >-->
+<!--        {{ recent }}-->
+<!--      </button>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</div>-->
