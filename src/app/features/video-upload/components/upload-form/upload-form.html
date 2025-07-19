@@ -1,0 +1,131 @@
+<div class="upload-form-container">
+  <!-- File Preview -->
+  <div class="file-preview">
+    <div class="file-info">
+      <div class="file-icon">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polygon points="23 7 16 12 23 17 23 7"></polygon>
+          <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
+        </svg>
+      </div>
+      <div class="file-details">
+        <h4 class="file-name">{{ selectedFile.name }}</h4>
+        <p class="file-size">{{ formatFileSize(selectedFile.size) }}</p>
+        <p class="file-type">{{ selectedFile.type }}</p>
+      </div>
+    </div>
+    <button
+      type="button"
+      class="remove-file-btn"
+      (click)="removeFile()"
+      [disabled]="isUploading">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Upload Form -->
+  <form [formGroup]="uploadForm" (ngSubmit)="onSubmit()" class="upload-form">
+    <!-- Title Field -->
+    <div class="form-group">
+      <label for="title" class="form-label">
+        Video Title <span class="required">*</span>
+      </label>
+      <input
+        id="title"
+        type="text"
+        class="form-input"
+        formControlName="title"
+        placeholder="Enter a descriptive title for your video"
+        [class.error]="isFieldInvalid('title')"
+        [disabled]="isUploading">
+      <div class="error-message" *ngIf="isFieldInvalid('title')">
+            <span *ngIf="uploadForm.get('title')?.errors?.['required']">
+              Title is required
+            </span>
+        <span *ngIf="uploadForm.get('title')?.errors?.['minlength']">
+              Title must be at least 3 characters long
+            </span>
+        <span *ngIf="uploadForm.get('title')?.errors?.['maxlength']">
+              Title cannot exceed 100 characters
+            </span>
+      </div>
+    </div>
+
+    <!-- Description Field -->
+    <div class="form-group">
+      <label for="description" class="form-label">Description</label>
+      <textarea
+        id="description"
+        class="form-textarea"
+        formControlName="description"
+        placeholder="Tell viewers about your video (optional)"
+        rows="4"
+        [disabled]="isUploading">
+          </textarea>
+      <div class="error-message" *ngIf="isFieldInvalid('description')">
+            <span *ngIf="uploadForm.get('description')?.errors?.['maxlength']">
+              Description cannot exceed 500 characters
+            </span>
+      </div>
+      <div class="field-hint">
+        {{ uploadForm.get('description')?.value?.length || 0 }}/500 characters
+      </div>
+    </div>
+
+    <!-- Tags Field -->
+    <div class="form-group">
+      <label for="tags" class="form-label">Tags</label>
+      <input
+        id="tags"
+        type="text"
+        class="form-input"
+        formControlName="tagsInput"
+        placeholder="Add tags separated by commas (e.g., music, tutorial, fun)"
+        [disabled]="isUploading">
+      <div class="field-hint">
+        Separate tags with commas to help others find your video
+      </div>
+
+      <!-- Tags Preview -->
+      <div class="tags-preview" *ngIf="parsedTags.length > 0">
+            <span class="tag" *ngFor="let tag of parsedTags">
+              {{ tag }}
+            </span>
+      </div>
+    </div>
+
+    <!-- Form Actions -->
+    <div class="form-actions">
+      <button
+        type="button"
+        class="btn btn-secondary"
+        (click)="cancelUpload()"
+        [disabled]="isUploading">
+        Cancel
+      </button>
+
+      <button
+        type="submit"
+        class="btn btn-primary"
+        [disabled]="uploadForm.invalid || isUploading">
+            <span *ngIf="!isUploading">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7,10 12,15 17,10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+              Upload Video
+            </span>
+        <span *ngIf="isUploading">
+              <svg class="spinner" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 12a9 9 0 1 1-6.219-8.56"/>
+              </svg>
+              Uploading...
+            </span>
+      </button>
+    </div>
+  </form>
+</div>
