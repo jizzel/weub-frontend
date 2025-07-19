@@ -1,0 +1,280 @@
+.footer {
+  background-color: #111827; /* bg-gray-900 */
+  color: #d1d5db; /* text-gray-300 */
+  margin-top: auto;
+  border-top: 1px solid rgba(75, 85, 99, 0.3);
+}
+
+.footer-container {
+  max-width: 80rem; /* max-w-7xl */
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+@media (min-width: 640px) {
+  .footer-container {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .footer-container {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+.footer-content {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+}
+
+@media (min-width: 768px) {
+  .footer-content {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .footer-content {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.footer-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.footer-brand {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.brand-name {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: transparent;
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.brand-tagline {
+  font-size: 0.875rem;
+  color: #9ca3af; /* text-gray-400 */
+  line-height: 1.625;
+}
+
+.version-info {
+  font-size: 0.75rem;
+  color: #6b7280; /* text-gray-500 */
+  font-family: monospace;
+}
+
+.footer-heading {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: white;
+  margin-bottom: 1rem;
+}
+
+.footer-links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.footer-links li {
+  display: block;
+}
+
+.footer-link {
+  color: #9ca3af;
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  transition: color 0.2s;
+}
+
+.footer-link:hover {
+  color: #60a5fa;
+}
+
+.footer-link.active {
+  color: #60a5fa;
+  font-weight: 500;
+}
+
+.footer-link.external-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.footer-link.external-link:hover .external-icon {
+  color: #60a5fa;
+  transform: translate(0.125rem, -0.125rem);
+}
+
+.external-icon {
+  width: 0.75rem;
+  height: 0.75rem;
+  opacity: 0.6;
+  transition: all 0.2s;
+}
+
+.footer-bottom {
+  border-top: 1px solid #374151; /* border-gray-700 */
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+}
+
+.footer-bottom-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  justify-content: space-between;
+  align-items: center;
+}
+
+@media (min-width: 640px) {
+  .footer-bottom-content {
+    flex-direction: row;
+  }
+}
+
+.copyright {
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.footer-meta {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.build-info {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.status-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: help;
+}
+
+.status-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 9999px;
+}
+
+.status-dot.status-healthy {
+  background-color: #22c55e;
+  box-shadow: 0 0 6px rgba(34, 197, 94, 0.6);
+  animation: pulse-green 2s infinite;
+}
+
+.status-dot.status-warning {
+  background-color: #eab308;
+  animation: pulse-yellow 2s infinite;
+}
+
+.status-dot.status-error {
+  background-color: #ef4444;
+  animation: pulse-red 2s infinite;
+}
+
+.status-text {
+  font-size: 0.75rem;
+}
+
+@keyframes pulse-green {
+  0%, 100% {
+    box-shadow: 0 0 6px rgba(34, 197, 94, 0.6);
+  }
+  50% {
+    box-shadow: 0 0 12px rgba(34, 197, 94, 0.8);
+  }
+}
+
+@keyframes pulse-yellow {
+  0%, 100% {
+    box-shadow: 0 0 6px rgba(234, 179, 8, 0.6);
+  }
+  50% {
+    box-shadow: 0 0 12px rgba(234, 179, 8, 0.8);
+  }
+}
+
+@keyframes pulse-red {
+  0%, 100% {
+    box-shadow: 0 0 6px rgba(239, 68, 68, 0.6);
+  }
+  50% {
+    box-shadow: 0 0 12px rgba(239, 68, 68, 0.8);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .footer-content {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
+
+  .footer-section {
+    text-align: center;
+  }
+
+  .footer-bottom-content {
+    text-align: center;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .footer-meta {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}
+
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+  .footer {
+    background-color: #0f172a;
+  }
+}
+
+/* Accessibility focus state */
+.footer-link:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px #3b82f6, 0 0 0 4px #111827;
+  border-radius: 0.25rem;
+}
+
+/* Print */
+@media print {
+  .footer {
+    display: none;
+  }
+}

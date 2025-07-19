@@ -1,0 +1,122 @@
+<!-- src/app/shared/components/footer/footer.component.html -->
+<footer class="footer">
+  <div class="footer-container">
+    <!-- Main Footer Content -->
+    <div class="footer-content">
+      <!-- Brand Section -->
+      <div class="footer-section">
+        <div class="footer-brand">
+          <h3 class="brand-name">Weub</h3>
+          <p class="brand-tagline">Minimal video streaming platform</p>
+          <p class="version-info">v{{ appVersion }}</p>
+        </div>
+      </div>
+
+      <!-- Navigation Links -->
+      <div class="footer-section">
+        <h4 class="footer-heading">Navigation</h4>
+        <ul class="footer-links">
+          <li *ngFor="let link of footerLinks">
+            <a
+              [routerLink]="link.route"
+              class="footer-link"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: link.route === '/' }"
+            >
+              {{ link.label }}
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Resources/Info -->
+      <div class="footer-section">
+        <h4 class="footer-heading">Resources</h4>
+        <ul class="footer-links">
+          <li>
+            <a
+              [href]="links.github"
+              class="footer-link external-link"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              GitHub
+              <svg class="external-icon" viewBox="0 0 16 16" fill="currentColor">
+                <path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2Z"/>
+                <path d="M6.854 10.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L4.707 7H14.5a.5.5 0 0 1 0 1H4.707l2.147 2.146Z"/>
+              </svg>
+            </a>
+          </li>
+          <li>
+            <a
+              [href]="links.api"
+              class="footer-link external-link"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              API Docs
+              <svg class="external-icon" viewBox="0 0 16 16" fill="currentColor">
+                <path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2Z"/>
+                <path d="M6.854 10.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L4.707 7H14.5a.5.5 0 0 1 0 1H4.707l2.147 2.146Z"/>
+              </svg>
+            </a>
+          </li>
+          <li>
+            <a
+              [href]="links.support"
+              class="footer-link"
+            >
+              Support
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Legal/Privacy -->
+      <div class="footer-section">
+        <h4 class="footer-heading">Legal</h4>
+        <ul class="footer-links">
+          <li *ngFor="let link of legalLinks">
+            <a
+              *ngIf="!link.external"
+              [routerLink]="link.route"
+              class="footer-link"
+            >
+              {{ link.label }}
+            </a>
+            <a
+              *ngIf="link.external"
+              [href]="link.url"
+              class="footer-link external-link"
+              target="_blank"
+              rel="noopener noreferrer"
+              (click)="onLinkClick(link)"
+            >
+              {{ link.label }}
+              <svg class="external-icon" viewBox="0 0 16 16" fill="currentColor">
+                <path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2Z"/>
+                <path d="M6.854 10.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L4.707 7H14.5a.5.5 0 0 1 0 1H4.707l2.147 2.146Z"/>
+              </svg>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Footer Bottom -->
+    <div class="footer-bottom">
+      <div class="footer-bottom-content">
+        <p class="copyright">
+          © {{ currentYear }} Weub. All rights reserved.
+        </p>
+        <div class="footer-meta">
+          <span class="build-info">Built with Angular & ❤️</span>
+          <span class="status-indicator" title="Service Status">
+            <span class="status-dot status-healthy"></span>
+            <span class="status-text">All systems operational</span>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
