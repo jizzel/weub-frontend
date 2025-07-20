@@ -1,0 +1,60 @@
+<div class="video-upload-container">
+  <div class="upload-header">
+    <h1 class="page-title">Upload Video</h1>
+    <p class="page-description">
+      Share your videos with the world. Supported formats: MP4, MOV, WEBM, AVI (Max 2GB)
+    </p>
+  </div>
+
+  <div class="upload-content">
+    <!-- File Drop Zone -->
+    <div class="dropzone-section" *ngIf="!selectedFile">
+      <app-file-dropzone
+        [allowedTypes]="allowedVideoTypes"
+        [maxFileSize]="maxFileSize"
+        (fileSelected)="onFileSelected($event)"
+        (fileRejected)="onFileError($event)">
+      </app-file-dropzone>
+    </div>
+
+    <!-- Upload Form -->
+    <div class="form-section" *ngIf="selectedFile">
+      <app-upload-form
+        [selectedFile]="selectedFile"
+        [isUploading]="isUploading"
+        (uploadStarted)="onUploadStarted($event)"
+        (uploadCanceled)="onUploadCanceled()"
+        (fileRemoved)="onFileRemoved()">
+      </app-upload-form>
+    </div>
+
+    <!-- Upload Progress -->
+    <div class="progress-section" *ngIf="(uploadProgress$ | async)?.length">
+      <div class="progress-header">
+        <h3>Upload Progress</h3>
+        <button
+          class="clear-btn"
+          (click)="clearCompleted()"
+          [disabled]="!hasCompletedUploads">
+          Clear Completed
+        </button>
+      </div>
+
+      <app-upload-progress
+        [uploads]="(uploadProgress$ | async) ?? []"
+        (cancelUpload)="cancelUpload($event)">
+      </app-upload-progress>
+    </div>
+  </div>
+
+  <!-- Upload Tips -->
+  <div class="upload-tips" *ngIf="!selectedFile">
+    <h3>Upload Tips</h3>
+    <ul class="tips-list">
+      <li>• Videos are processed in the background and will be available for streaming once ready</li>
+      <li>• We support adaptive streaming - your video will be available in multiple qualities</li>
+      <li>• Processing time depends on video length and resolution</li>
+      <li>• You can upload multiple videos simultaneously</li>
+    </ul>
+  </div>
+</div>
