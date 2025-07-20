@@ -1,0 +1,114 @@
+<!-- Video List Header -->
+<div class="bg-white shadow-sm border-b">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+    <div class="flex flex-col space-y-4 lg:flex-row lg:items-center lg:justify-between lg:space-y-0">
+
+      <!-- Title and Stats -->
+      <div class="flex-1">
+        <h1 class="text-2xl font-bold text-gray-900">Videos</h1>
+        <p class="mt-1 text-sm text-gray-500" *ngIf="!(loading$ | async)">
+          {{ (pagination$ | async)?.totalItems }} videos found
+          <ng-container *ngIf="filters$ | async as filters">
+            <span *ngIf="filters.search || filters.status || (filters.tags?.length || 0) > 0">
+              matching your criteria
+            </span>
+          </ng-container>
+        </p>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="flex items-center space-x-4">
+        <!-- View Mode Toggle -->
+        <div class="flex bg-gray-100 rounded-lg p-1">
+          <button
+            type="button"
+            (click)="onViewModeChange('grid')"
+            [class.bg-white]="viewMode() === 'grid'"
+            [class.shadow-sm]="viewMode() === 'grid'"
+            class="px-3 py-1.5 text-sm font-medium text-gray-700 rounded-md hover:text-gray-900 transition-all"
+            aria-label="Grid view">
+            <i class="fas fa-grid-2 mr-1"></i> Grid
+          </button>
+          <button
+            type="button"
+            (click)="onViewModeChange('list')"
+            [class.bg-white]="viewMode() === 'list'"
+            [class.shadow-sm]="viewMode() === 'list'"
+            class="px-3 py-1.5 text-sm font-medium text-gray-700 rounded-md hover:text-gray-900 transition-all"
+            aria-label="List view">
+            <i class="fas fa-list mr-1"></i> List
+          </button>
+        </div>
+
+        <!-- Refresh Button -->
+        <button
+          type="button"
+          (click)="onRefresh()"
+          [disabled]="loading$ | async"
+          class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+          aria-label="Refresh list">
+          <i class="fas fa-sync-alt" [class.animate-spin]="loading$ | async"></i>
+          <span class="ml-2">Refresh</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Search and Filters -->
+    <div class="mt-6 flex flex-col space-y-4 lg:flex-row lg:space-y-0 lg:space-x-4">
+      <div class="flex-1">
+        <app-search-bar
+          [formControl]="searchControl"
+          (search)="onSearchChange($event)"
+          placeholder="Search videos...">
+        </app-search-bar>
+      </div>
+
+      <div class="flex-none">
+        <app-video-filters
+          [filters]="(filters$ | async) || {}"
+          (filtersChange)="onFiltersChange($event)">
+        </app-video-filters>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Main Content -->
+<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <!-- Loading State -->
+  <app-loading-spinner *ngIf="loading$ | async" [message]="getLoadingMessage()"></app-loading-spinner>
+
+  <!-- Error State -->
+  <app-error-message
+    *ngIf="error$ | async as error"
+    [message]="error"
+    (retry)="onRefresh()">
+  </app-error-message>
+
+  <!-- Empty State -->
+  <div *ngIf="isEmpty()" class="text-center py-12">
+    <p class="text-gray-500">{{ getEmptyStateMessage() }}</p>
+  </div>
+
+  <!-- Video Grid/List -->
+  <ng-container *ngIf="(videos$ | async) as videos">
+    <div [ngClass]="{'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6': viewMode() === 'grid',
+                     'flex flex-col space-y-4': viewMode() === 'list'}">
+      <app-video-card
+        *ngFor="let video of videos; trackBy: trackByVideoId"
+        [video]="video"
+        [viewMode]="viewMode()"
+        (statusUpdate)="onVideoStatusUpdate($event.id, $event.status)">
+      </app-video-card>
+    </div>
+
+    <!-- Pagination -->
+    <app-pagination
+      *ngIf="showPagination()"
+      [pagination]="(pagination$ | async)!"
+      [pageSizeOptions]="availablePageSizes"
+      (pageChange)="onPageChange($event)"
+      (pageSizeChange)="onPageSizeChange($event)">
+    </app-pagination>
+  </ng-container>
+</main>
