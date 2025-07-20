@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
   selector: 'app-loading-spinner',
   imports: [CommonModule],
   templateUrl: './loading-spinner.html',
+  standalone: true,
   styleUrl: './loading-spinner.css'
 })
 export class LoadingSpinner {
