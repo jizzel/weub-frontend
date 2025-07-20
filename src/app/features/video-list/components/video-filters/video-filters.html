@@ -1,0 +1,340 @@
+<div class="bg-white rounded-lg shadow-sm border p-4 mb-6">
+  <div class="flex items-center justify-between mb-4">
+    <h3 class="text-lg font-semibold text-gray-900">Filters</h3>
+    <button
+      (click)="toggleFilters()"
+      class="text-sm text-blue-600 hover:text-blue-800 font-medium"
+    >
+      {{ showAdvanced ? 'Hide Filters' : 'Show Filters' }}
+    </button>
+  </div>
+
+  <!-- Basic Filters (Always Visible) -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+    <!-- Resolution Filter -->
+    <div>
+      <label for="resolution" class="block text-sm font-medium text-gray-700 mb-1">
+        Resolution
+      </label>
+      <select
+        id="resolution"
+        [(ngModel)]="currentFilters.resolution"
+        (ngModelChange)="onFilterChange()"
+        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+      >
+        <option value="">All Resolutions</option>
+        <option value="480p">480p</option>
+        <option value="720p">720p</option>
+        <option value="1080p">1080p</option>
+        <option value="1440p">1440p</option>
+        <option value="2160p">4K (2160p)</option>
+      </select>
+    </div>
+
+    <!-- Status Filter -->
+    <div>
+      <label for="status" class="block text-sm font-medium text-gray-700 mb-1">
+        Status
+      </label>
+      <select
+        id="status"
+        [(ngModel)]="currentFilters.status"
+        (ngModelChange)="onFilterChange()"
+        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+      >
+        <option value="">All Status</option>
+        <option value="ready">Ready</option>
+        <option value="processing">Processing</option>
+        <option value="pending">Pending</option>
+        <option value="failed">Failed</option>
+      </select>
+    </div>
+
+    <!-- Sort By -->
+    <div>
+      <label for="sortBy" class="block text-sm font-medium text-gray-700 mb-1">
+        Sort By
+      </label>
+      <div class="flex gap-2">
+        <select
+          id="sortBy"
+          [(ngModel)]="currentFilters.sortBy"
+          (ngModelChange)="onFilterChange()"
+          class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+        >
+          <option value="uploadDate">Upload Date</option>
+          <option value="title">Title</option>
+          <option value="duration">Duration</option>
+        </select>
+        <button
+          (click)="toggleSortOrder()"
+          class="px-3 py-2 border border-gray-300 rounded-md hover:bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          title="{{ currentFilters.sortOrder === 'asc' ? 'Sort Ascending' : 'Sort Descending' }}"
+        >
+          <svg class="w-4 h-4 transform" [class.rotate-180]="currentFilters.sortOrder === 'desc'" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Advanced Filters (Collapsible) -->
+  <div *ngIf="showAdvanced" class="border-t pt-4">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <!-- Date Range -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-2">
+          Upload Date Range
+        </label>
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label for="dateFrom" class="block text-xs text-gray-500 mb-1">From</label>
+            <input
+              type="date"
+              id="dateFrom"
+              [(ngModel)]="currentFilters.uploadDateFrom"
+              (ngModelChange)="onFilterChange()"
+              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            />
+          </div>
+          <div>
+            <label for="dateTo" class="block text-xs text-gray-500 mb-1">To</label>
+            <input
+              type="date"
+              id="dateTo"
+              [(ngModel)]="currentFilters.uploadDateTo"
+              (ngModelChange)="onFilterChange()"
+              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- Tags Filter -->
+      <div>
+        <label for="tagsInput" class="block text-sm font-medium text-gray-700 mb-2">
+          Tags
+        </label>
+        <div class="space-y-2">
+          <input
+            type="text"
+            id="tagsInput"
+            [(ngModel)]="tagInput"
+            (keydown.enter)="addTag($event)"
+            placeholder="Add tag and press Enter"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          />
+          <div class="flex flex-wrap gap-2" *ngIf="currentFilters.tags && currentFilters.tags.length > 0">
+                <span
+                  *ngFor="let tag of currentFilters.tags"
+                  class="inline-flex items-center px-2 py-1 bg-blue-100 text-blue-800 text-sm rounded-md"
+                >
+                  {{ tag }}
+                  <button
+                    (click)="removeTag(tag)"
+                    class="ml-1 text-blue-600 hover:text-blue-800"
+                  >
+                    <svg class="w-3 h-3" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+                    </svg>
+                  </button>
+                </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filter Actions -->
+  <div class="flex items-center justify-between mt-4 pt-4 border-t">
+    <div class="text-sm text-gray-500">
+      {{ getActiveFiltersCount() }} filter(s) active
+    </div>
+    <div class="flex gap-2">
+      <button
+        (click)="clearAllFilters()"
+        class="px-4 py-2 text-sm text-gray-600 hover:text-gray-800 font-medium"
+      >
+        Clear All
+      </button>
+      <button
+        (click)="applyFilters()"
+        class="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 focus:ring-2 focus:ring-blue-500"
+      >
+        Apply Filters
+      </button>
+    </div>
+  </div>
+</div>
+
+
+<!--<div class="bg-white rounded-lg shadow-sm border p-4 mb-6">-->
+<!--  <div class="flex items-center justify-between mb-4">-->
+<!--    <h3 class="text-lg font-semibold text-gray-900">Filters</h3>-->
+<!--    <button-->
+<!--      (click)="toggleFilters()"-->
+<!--      class="text-sm text-blue-600 hover:text-blue-800 font-medium"-->
+<!--    >-->
+<!--      {{ showAdvanced ? 'Hide Filters' : 'Show Filters' }}-->
+<!--    </button>-->
+<!--  </div>-->
+
+<!--  &lt;!&ndash; Basic Filters (Always Visible) &ndash;&gt;-->
+<!--  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">-->
+<!--    &lt;!&ndash; Resolution Filter &ndash;&gt;-->
+<!--    <div>-->
+<!--      <label for="resolution" class="block text-sm font-medium text-gray-700 mb-1">-->
+<!--        Resolution-->
+<!--      </label>-->
+<!--      <select-->
+<!--        id="resolution"-->
+<!--        [(ngModel)]="currentFilters.resolution"-->
+<!--        (ngModelChange)="onFilterChange()"-->
+<!--        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"-->
+<!--      >-->
+<!--        <option value="">All Resolutions</option>-->
+<!--        <option value="480p">480p</option>-->
+<!--        <option value="720p">720p</option>-->
+<!--        <option value="1080p">1080p</option>-->
+<!--        <option value="1440p">1440p</option>-->
+<!--        <option value="2160p">4K (2160p)</option>-->
+<!--      </select>-->
+<!--    </div>-->
+
+<!--    &lt;!&ndash; Status Filter &ndash;&gt;-->
+<!--    <div>-->
+<!--      <label for="status" class="block text-sm font-medium text-gray-700 mb-1">-->
+<!--        Status-->
+<!--      </label>-->
+<!--      <select-->
+<!--        id="status"-->
+<!--        [(ngModel)]="currentFilters.status"-->
+<!--        (ngModelChange)="onFilterChange()"-->
+<!--        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"-->
+<!--      >-->
+<!--        <option value="">All Status</option>-->
+<!--        <option value="ready">Ready</option>-->
+<!--        <option value="processing">Processing</option>-->
+<!--        <option value="pending">Pending</option>-->
+<!--        <option value="failed">Failed</option>-->
+<!--      </select>-->
+<!--    </div>-->
+
+<!--    &lt;!&ndash; Sort By &ndash;&gt;-->
+<!--    <div>-->
+<!--      <label for="sortBy" class="block text-sm font-medium text-gray-700 mb-1">-->
+<!--        Sort By-->
+<!--      </label>-->
+<!--      <div class="flex gap-2">-->
+<!--        <select-->
+<!--          id="sortBy"-->
+<!--          [(ngModel)]="currentFilters.sortBy"-->
+<!--          (ngModelChange)="onFilterChange()"-->
+<!--          class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"-->
+<!--        >-->
+<!--          <option value="uploadDate">Upload Date</option>-->
+<!--          <option value="title">Title</option>-->
+<!--          <option value="duration">Duration</option>-->
+<!--        </select>-->
+<!--        <button-->
+<!--          (click)="toggleSortOrder()"-->
+<!--          class="px-3 py-2 border border-gray-300 rounded-md hover:bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"-->
+<!--          title="{{ currentFilters.sortOrder === 'asc' ? 'Sort Ascending' : 'Sort Descending' }}"-->
+<!--        >-->
+<!--          <svg class="w-4 h-4 transform" [class.rotate-180]="currentFilters.sortOrder === 'desc'" viewBox="0 0 20 20" fill="currentColor">-->
+<!--            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />-->
+<!--          </svg>-->
+<!--        </button>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+
+<!--  &lt;!&ndash; Advanced Filters (Collapsible) &ndash;&gt;-->
+<!--  <div *ngIf="showAdvanced" class="border-t pt-4">-->
+<!--    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">-->
+<!--      &lt;!&ndash; Date Range &ndash;&gt;-->
+<!--      <div>-->
+<!--        <label class="block text-sm font-medium text-gray-700 mb-2">-->
+<!--          Upload Date Range-->
+<!--        </label>-->
+<!--        <div class="grid grid-cols-2 gap-2">-->
+<!--          <div>-->
+<!--            <label for="dateFrom" class="block text-xs text-gray-500 mb-1">From</label>-->
+<!--            <input-->
+<!--              type="date"-->
+<!--              id="dateFrom"-->
+<!--              [(ngModel)]="currentFilters.uploadDateFrom"-->
+<!--              (ngModelChange)="onFilterChange()"-->
+<!--              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"-->
+<!--            />-->
+<!--          </div>-->
+<!--          <div>-->
+<!--            <label for="dateTo" class="block text-xs text-gray-500 mb-1">To</label>-->
+<!--            <input-->
+<!--              type="date"-->
+<!--              id="dateTo"-->
+<!--              [(ngModel)]="currentFilters.uploadDateTo"-->
+<!--              (ngModelChange)="onFilterChange()"-->
+<!--              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"-->
+<!--            />-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+
+<!--      &lt;!&ndash; Tags Filter &ndash;&gt;-->
+<!--      <div>-->
+<!--        <label for="tagsInput" class="block text-sm font-medium text-gray-700 mb-2">-->
+<!--          Tags-->
+<!--        </label>-->
+<!--        <div class="space-y-2">-->
+<!--          <input-->
+<!--            type="text"-->
+<!--            id="tagsInput"-->
+<!--            [(ngModel)]="tagInput"-->
+<!--            (keydown.enter)="addTag($event)"-->
+<!--            placeholder="Add tag and press Enter"-->
+<!--            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"-->
+<!--          />-->
+<!--          <div class="flex flex-wrap gap-2" *ngIf="currentFilters.tags && currentFilters.tags.length > 0">-->
+<!--            <span-->
+<!--              *ngFor="let tag of currentFilters.tags"-->
+<!--              class="inline-flex items-center px-2 py-1 bg-blue-100 text-blue-800 text-sm rounded-md"-->
+<!--            >-->
+<!--              {{ tag }}-->
+<!--              <button-->
+<!--                (click)="removeTag(tag)"-->
+<!--                class="ml-1 text-blue-600 hover:text-blue-800"-->
+<!--              >-->
+<!--                <svg class="w-3 h-3" viewBox="0 0 20 20" fill="currentColor">-->
+<!--                  <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />-->
+<!--                </svg>-->
+<!--              </button>-->
+<!--            </span>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+
+<!--  &lt;!&ndash; Filter Actions &ndash;&gt;-->
+<!--  <div class="flex items-center justify-between mt-4 pt-4 border-t">-->
+<!--    <div class="text-sm text-gray-500">-->
+<!--      {{ getActiveFiltersCount() }} filter(s) active-->
+<!--    </div>-->
+<!--    <div class="flex gap-2">-->
+<!--      <button-->
+<!--        (click)="clearAllFilters()"-->
+<!--        class="px-4 py-2 text-sm text-gray-600 hover:text-gray-800 font-medium"-->
+<!--      >-->
+<!--        Clear All-->
+<!--      </button>-->
+<!--      <button-->
+<!--        (click)="applyFilters()"-->
+<!--        class="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 focus:ring-2 focus:ring-blue-500"-->
+<!--      >-->
+<!--        Apply Filters-->
+<!--      </button>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</div>-->

@@ -1,0 +1,117 @@
+:host {
+  display: block;
+}
+
+/* Custom focus styles for form elements */
+.focus-ring:focus {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 2px #3b82f6;
+}
+
+/* Smooth transitions for collapsible content */
+.advanced-filters-enter {
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: all 0.3s ease-in-out;
+}
+
+.advanced-filters-enter-active {
+  opacity: 1;
+  max-height: 500px;
+}
+
+/* Tag styles */
+.tag-chip {
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Filter counter badge */
+.filter-count {
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+}
+
+/* Hover effects for buttons */
+.btn-hover:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease-in-out;
+}
+
+/* Sort order button rotation animation */
+.sort-icon {
+  transition: transform 0.2s ease-in-out;
+}
+
+/* Custom scrollbar for advanced filters when expanded */
+.advanced-filters::-webkit-scrollbar {
+  width: 4px;
+}
+
+.advanced-filters::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+.advanced-filters::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 2px;
+}
+
+.advanced-filters::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .filter-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .filter-actions {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .filter-actions button {
+    width: 100%;
+  }
+}
+
+/* Loading state for apply button */
+.btn-loading {
+  position: relative;
+  color: transparent;
+}
+
+.btn-loading::after {
+  content: '';
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  top: 50%;
+  left: 50%;
+  margin-left: -8px;
+  margin-top: -8px;
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+  border-top-color: transparent;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
