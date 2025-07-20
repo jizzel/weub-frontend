@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
   selector: 'app-error-message',
   imports: [CommonModule],
   templateUrl: './error-message.html',
+  standalone: true,
   styleUrl: './error-message.css'
 })
 export class ErrorMessage {
